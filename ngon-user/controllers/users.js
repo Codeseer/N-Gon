@@ -40,9 +40,24 @@ exports.create = function(req, res) {
 }
 
 exports.show = function(req, res) {
-	User.findById(req.params.id, function(err, doc){
-		res.send(JSON.stringify(doc));
-	});
+	if(req.params.id)
+	{		
+		User.findById(req.params.id, function(err, doc){
+			res.send(JSON.stringify(doc));
+		});
+	}
+	else if(req.params.username)
+	{
+		User.findOne({username: req.params.username}, function(err, doc){
+			res.send(JSON.stringify(doc));
+		});
+	}
+	else if(req.params.email)
+	{
+		User.findOne({email: req.params.email}, function(err, doc){
+			res.send(JSON.stringify(doc));
+		});
+	}
 }
 
 exports.update = function(req, res) {
