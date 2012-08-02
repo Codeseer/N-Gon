@@ -40,6 +40,9 @@ exports.create = function(req, res) {
 }
 
 exports.show = function(req, res) {
+	User.findById(req.params.id, function(err, doc){
+		res.send(JSON.stringify(doc));
+	});
 }
 
 exports.update = function(req, res) {
