@@ -1,5 +1,4 @@
 //all the modles for mongoose
-var Game = require('../models/game.js');
 var User = require('../models/user.js');
 
 exports.create = function(req, res) {
@@ -35,25 +34,46 @@ exports.show = function(req, res) {
 
 exports.update = function(req, res) {
 
-	findUser(req.params, updateUser);
+	findUser(req.body, updateUser);
 
 	function updateUser(err, doc){
-		if (req.body.username){			
-			doc.username = req.body.username;
+		var userUpdate = req.body.user;
+		if (userUpdate.username){			
+			doc.username = userUpdate.username;
 		}
-		if(req.body.email){
-			doc.email = req.body.email;			
+		if(userUpdate.email){
+			doc.email = userUpdate.email;			
 		}
-		if(req.body.name.first){
-			doc.name.first = req.body.name.first;			
+		if(userUpdate.name.first){
+			doc.name.first = userUpdate.name.first;			
 		}
-		if(req.body.name.last){
-			doc.name.last = req.body.name.last;
+		if(userUpdate.name.last){
+			doc.name.last = userUpdate.name.last;
 		}
+
+		doc.save(function (err){
+			if(!err)
+				res.send(JSON.stringify(doc));
+			else
+				res.send(err);
+		});
 	}
 }
 
 exports.delete = function(req, res) {
+
+	findUser(req.body, deleteUser);
+
+	function deleteUser(err, doc) {
+		//just kidding dont actually delete the user, just set them to inactive
+		doc.active = false;
+		doc.save(function (err){
+			if(!err)
+				res.send(true);
+			else
+				res.send(err);
+		});
+	}
 }
 
 function findUser(params, callback)
@@ -62,7 +82,7 @@ function findUser(params, callback)
 		User.findById(params.id, callback);
 	}
 	else if(params.username){
-		User.findOne({username: params.username}, callback);		
+		User.findOne({username: params.username}, callback);
 	}
 	else if(params.email){
 		User.findOne({email: params.email}, callback);		

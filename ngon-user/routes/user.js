@@ -1,8 +1,19 @@
-var user = require('../controllers/users');
+var user = require('../controllers/user');
 
 module.exports = function(app) {
-	app.post('/user', user.create);	
-	app.get('/user/:username', user.show);
-	app.get('/user/id/:id', user.show);
-	app.get('/user/email/:email', user.show);
+
+	//Create
+	app.post('/', user.create);	
+	
+	//Read
+	app.get('/:username', user.show);
+	app.get('/id/:id', user.show);
+	app.get('/email/:email', user.show);
+	
+	//Update
+	app.put('/', user.update);
+
+	//Delete
+	app.delete('/', user.delete);
+
 }

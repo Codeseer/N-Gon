@@ -12,7 +12,8 @@ var User = new Schema({
     name: { first: {type: String, trim: true},
     		last: {type: String, trim: true} },
     games: [ObjectId],
-    password: String
+    password: String,
+    active: Boolean
 });
 
 module.exports = mongoose.model('user', User);

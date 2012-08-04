@@ -1,0 +1,21 @@
+<html>
+    <head><title>Test</title></head>
+    <body>
+    	<form method="post" action="http://192.168.1.10/">
+        username <input type="text" name="username">
+
+        <p>
+			name
+		    <p>
+		    	first<input type="text" name="user[name[first]]">
+		    	last<input type="text" name="user[name[last]]">
+			</p>
+		    
+		    <p>email<input type="text" name="user[email]"></p>
+		    <p>username<input type="text" name="user[username]"></p>
+        </p>
+        <input type="hidden" name="_method" value="put">
+        <input type="submit" value="Update">
+</form>
+    </body>
+</html>
