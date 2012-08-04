@@ -11,7 +11,6 @@ module.exports = function(app) {
 
 	//developement config
 	app.configure('development', function() {
-		app.set('db uri', '192.168.1.10/ngon-user');
 	});
 
 	//testing config
