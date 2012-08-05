@@ -1,0 +1,9 @@
+{
+  "name": "ngon-create",
+  "description": "Utility for making new ngon apps",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+  	"wrench" : "1.x"
+  }
+}
