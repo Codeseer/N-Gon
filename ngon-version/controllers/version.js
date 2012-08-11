@@ -5,14 +5,14 @@ var Version = require('../models/version'),
 exports.create = function(req, res) {
 	var newVersion = new Version();
 
-	if(req.body.user_id){
+	if (req.body.user_id) {
 		newVersion.user_id = req.body.user_id;
 	}
-	if(req.body.version){
+	if (req.body.version) {
 		newVersion.version = req.body.version;
 	}
-	if(req.body.data){
-		for(key in req.body.data){
+	if (req.body.data) {
+		for (key in req.body.data) {
 			var newData = new Data();
 
 			newData.key = key;
@@ -23,24 +23,52 @@ exports.create = function(req, res) {
 		}
 	}
 
-	newVersion.save(function(err){
-		res.send(newVersion._id);
+	newVersion.save(function(err) {
+		if(err){res.send(err);}
+		res.send('success');
 	});
-}
+};
 
 exports.show = function(req, res) {
-	findVersion(req.params, showVersion);
-	
-	function showVersion(err, doc){
-		res.send(JSON.stringify(doc));
-	}
-}
+	getVersions(req.params, showVersions);
 
-function findVersion(params, callback) {
-	if(params.version_id) {
-		Version.findById(params.version_id, callback);
+	function showVersions(err, docs) {
+		var response_json;
+		if(err){
+			throw err;
+		}
+		else if(docs.length>0) {
+			console.log(docs);
+			response_json.user_id = docs[0].user_id;
+			/*
+			each doc in the array so
+			[{user_id:123, version:1.01, data:{tehdata}},
+			{user_id:123, version:1.02, data:{tehdata2}}]
+			*/
+			docs.foreach(function(element, index){
+				var ver = response_json[element.version];
+				
+				//populate the ver data
+				for(var data_element in element.data){
+					ver.data_element = element.data.data_element;
+				}
+			});
+
+			res.send(JSON.stringify(response_json));
+		}
+		else {
+			res.send('no version');
+		}
+		
 	}
-	else if(params.user_id && params.version){
-		Version.findOne({"user_id": user_id, "version": version}, callback);
+};
+
+function getVersions(params, callback) {
+	if (params.user_id && params.version) {
+		Version
+			.where('user_id', params.user_id)
+			.where('version')
+			.gt(params.version)
+			.find(callback);
 	}
 }
